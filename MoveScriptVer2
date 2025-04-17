@@ -102,12 +102,291 @@ using UnityEngine.UI;
 public class LanguageModeladapter : MonoBehaviour
 {
     [Header("Aオブジェクト")]
-    public string A1;
-    [Header("Bオブジェクト")]
-    public string B1;
+public string A1;
+public string A2;
+public string A3;
+public string A4;
+public string A5;
+public string A6;
+public string A7;
+public string A8;
+public string A9;
+
+[Header("Bオブジェクト")]
+public string B1;
+public string B2;
+public string B3;
+public string B4;
+public string B5;
+public string B6;
+public string B7;
+public string B8;
+public string B9;
+
+[Header("Cオブジェクト")]
+public string C1;
+public string C2;
+public string C3;
+public string C4;
+public string C5;
+public string C6;
+public string C7;
+public string C8;
+public string C9;
+
+[Header("Dオブジェクト")]
+public string D1;
+public string D2;
+public string D3;
+public string D4;
+public string D5;
+public string D6;
+public string D7;
+public string D8;
+public string D9;
+
+[Header("Eオブジェクト")]
+public string E1;
+public string E2;
+public string E3;
+public string E4;
+public string E5;
+public string E6;
+public string E7;
+public string E8;
+public string E9;
+
+[Header("Fオブジェクト")]
+public string F1;
+public string F2;
+public string F3;
+public string F4;
+public string F5;
+public string F6;
+public string F7;
+public string F8;
+public string F9;
+
+[Header("Gオブジェクト")]
+public string G1;
+public string G2;
+public string G3;
+public string G4;
+public string G5;
+public string G6;
+public string G7;
+public string G8;
+public string G9;
+
+[Header("Hオブジェクト")]
+public string H1;
+public string H2;
+public string H3;
+public string H4;
+public string H5;
+public string H6;
+public string H7;
+public string H8;
+public string H9;
+
+[Header("Jオブジェクト")]
+public string J1;
+public string J2;
+public string J3;
+public string J4;
+public string J5;
+public string J6;
+public string J7;
+public string J8;
+public string J9;
+
+[Header("Kオブジェクト")]
+public string K1;
+public string K2;
+public string K3;
+public string K4;
+public string K5;
+public string K6;
+public string K7;
+public string K8;
+public string K9;
+
+[Header("Lオブジェクト")]
+public string L1;
+public string L2;
+public string L3;
+public string L4;
+public string L5;
+public string L6;
+public string L7;
+public string L8;
+public string L9;
+
+[Header("Mオブジェクト")]
+public string M1;
+public string M2;
+public string M3;
+public string M4;
+public string M5;
+public string M6;
+public string M7;
+public string M8;
+public string M9;
+
+[Header("Nオブジェクト")]
+public string N1;
+public string N2;
+public string N3;
+public string N4;
+public string N5;
+public string N6;
+public string N7;
+public string N8;
+public string N9;
+
+[Header("Oオブジェクト")]
+public string O1;
+public string O2;
+public string O3;
+public string O4;
+public string O5;
+public string O6;
+public string O7;
+public string O8;
+public string O9;
+
+[Header("Pオブジェクト")]
+public string P1;
+public string P2;
+public string P3;
+public string P4;
+public string P5;
+public string P6;
+public string P7;
+public string P8;
+public string P9;
+
+[Header("Qオブジェクト")]
+public string Q1;
+public string Q2;
+public string Q3;
+public string Q4;
+public string Q5;
+public string Q6;
+public string Q7;
+public string Q8;
+public string Q9;
+
+[Header("Rオブジェクト")]
+public string R1;
+public string R2;
+public string R3;
+public string R4;
+public string R5;
+public string R6;
+public string R7;
+public string R8;
+public string R9;
+
+[Header("Sオブジェクト")]
+public string S1;
+public string S2;
+public string S3;
+public string S4;
+public string S5;
+public string S6;
+public string S7;
+public string S8;
+public string S9;
+
+[Header("Tオブジェクト")]
+public string T1;
+public string T2;
+public string T3;
+public string T4;
+public string T5;
+public string T6;
+public string T7;
+public string T8;
+public string T9;
+
+[Header("Uオブジェクト")]
+public string U1;
+public string U2;
+public string U3;
+public string U4;
+public string U5;
+public string U6;
+public string U7;
+public string U8;
+public string U9;
+
+[Header("Vオブジェクト")]
+public string V1;
+public string V2;
+public string V3;
+public string V4;
+public string V5;
+public string V6;
+public string V7;
+public string V8;
+public string V9;
+
+[Header("Wオブジェクト")]
+public string W1;
+public string W2;
+public string W3;
+public string W4;
+public string W5;
+public string W6;
+public string W7;
+public string W8;
+public string W9;
+
+[Header("Xオブジェクト")]
+public string X1;
+public string X2;
+public string X3;
+public string X4;
+public string X5;
+public string X6;
+public string X7;
+public string X8;
+public string X9;
+
+[Header("Yオブジェクト")]
+public string Y1;
+public string Y2;
+public string Y3;
+public string Y4;
+public string Y5;
+public string Y6;
+public string Y7;
+public string Y8;
+public string Y9;
+
+[Header("Zオブジェクト")]
+public string Z1;
+public string Z2;
+public string Z3;
+public string Z4;
+public string Z5;
+public string Z6;
+public string Z7;
+public string Z8;
+public string Z9;
+    
+    
     [Header("Iオブジェクト")]
     public string I1;
     public string I2;
+    public string I3;
+    public string I4;
+    public string I5;
+    public string I6;
+    public string I7;
+    public string I8;
+    public string I9;
     [Header("Iのプレハブである場合はオンにしてください")]
     public bool Iswitch = false;
 
@@ -132,7 +411,239 @@ public class LanguageModeladapter : MonoBehaviour
             var prefubObject = Randomnumber switch
             {
                 0 => A1,
-                1 => B1,
+                1 => A2,
+                2 => A3,
+                3 => A4,
+                4 => A5,
+                5 => A6,
+                6 => A7,
+                7 => A8,
+                8 => A9,
+                9 => B1,
+                10 => B2,
+                11 => B3,
+                12 => B4,
+                13 => B5,
+                14 => B6,
+                15 => B7,
+                16 => B8,
+                17 => B9,
+                18 => C1,
+                19 => C2,
+                20 => C3,
+                21 => C4,
+                22 => C5,
+                23 => C6,
+                24 => C7,
+                25 => C8,
+                26 => C9,
+                27 => D1,
+                28 => D2,
+                29 => D3,
+                30 => D4,
+                31 => D5,
+                32 => D6,
+                33 => D7,
+                34 => D8,
+                35 => D9,
+                36 => E1,
+                37 => E2,
+                38 => E3,
+                39 => E4,
+                40 => E5,
+                41 => E6,
+                42 => E7,
+                43 => E8,
+                44 => E9,
+                45 => F1,
+                46 => F2,
+                47 => F3,
+                48 => F4,
+                49 => F5,
+                50 => F6,
+                51 => F7,
+                52 => F8,
+                53 => F9,
+                54 => G1,
+                55 => G2,
+                56 => G3,
+                57 => G4,
+                58 => G5,
+                59 => G6,
+                60 => G7,
+                61 => G8,
+                62 => G9,
+                63 => H1,
+                64 => H2,
+                65 => H3,
+                66 => H4,
+                67 => H5,
+                68 => H6,
+                69 => H7,
+                70 => H8,
+                71 => H9,
+                72 => I1,
+                73 => I2,
+                74 => I3,
+                75 => I4,
+                76 => I5,
+                77 => I6,
+                78 => I7,
+                79 => I8,
+                80 => I9,
+                81 => J1,
+                82 => J2,
+                83 => J3,
+                84 => J4,
+                85 => J5,
+                86 => J6,
+                87 => J7,
+                88 => J8,
+                89 => J9,
+                90 => K1,
+                91 => K2,
+                92 => K3,
+                93 => K4,
+                94 => K5,
+                95 => K6,
+                96 => K7,
+                97 => K8,
+                98 => K9,
+                99 => L1,
+                100 => L2,
+                101 => L3,
+                102 => L4,
+                103 => L5,
+                104 => L6,
+                105 => L7,
+                106 => L8,
+                107 => L9,
+                108 => M1,
+                109 => M2,
+                110 => M3,
+                111 => M4,
+                112 => M5,
+                113 => M6,
+                114 => M7,
+                115 => M8,
+                116 => M9,
+                117 => N1,
+                118 => N2,
+                119 => N3,
+                120 => N4,
+                121 => N5,
+                122 => N6,
+                123 => N7,
+                124 => N8,
+                125 => N9,
+                126 => O1,
+                127 => O2,
+                128 => O3,
+                129 => O4,
+                130 => O5,
+                131 => O6,
+                132 => O7,
+                133 => O8,
+                134 => O9,
+                135 => P1,
+                136 => P2,
+                137 => P3,
+                138 => P4,
+                139 => P5,
+                140 => P6,
+                141 => P7,
+                142 => P8,
+                143 => P9,
+                144 => Q1,
+                145 => Q2,
+                146 => Q3,
+                147 => Q4,
+                148 => Q5,
+                149 => Q6,
+                150 => Q7,
+                151 => Q8,
+                152 => Q9,
+                153 => R1,
+                154 => R2,
+                155 => R3,
+                156 => R4,
+                157 => R5,
+                158 => R6,
+                159 => R7,
+                160 => R8,
+                161 => R9,
+                162 => S1,
+                163 => S2,
+                164 => S3,
+                165 => S4,
+                166 => S5,
+                167 => S6,
+                168 => S7,
+                169 => S8,
+                170 => S9,
+                171 => T1,
+                172 => T2,
+                173 => T3,
+                174 => T4,
+                175 => T5,
+                176 => T6,
+                177 => T7,
+                178 => T8,
+                179 => T9,
+                180 => U1,
+                181 => U2,
+                182 => U3,
+                183 => U4,
+                184 => U5,
+                185 => U6,
+                186 => U7,
+                187 => U8,
+                188 => U9,
+                189 => V1,
+                190 => V2,
+                191 => V3,
+                192 => V4,
+                193 => V5,
+                194 => V6,
+                195 => V7,
+                196 => V8,
+                197 => V9,
+                198 => W1,
+                199 => W2,
+                200 => W3,
+                201 => W4,
+                202 => W5,
+                203 => W6,
+                204 => W7,
+                205 => W8,
+                206 => W9,
+                207 => X1,
+                208 => X2,
+                209 => X3,
+                210 => X4,
+                211 => X5,
+                212 => X6,
+                213 => X7,
+                214 => X8,
+                215 => X9,
+                216 => Y1,
+                217 => Y2,
+                218 => Y3,
+                219 => Y4,
+                220 => Y5,
+                221 => Y6,
+                222 => Y7,
+                223 => Y8,
+                224 => Y9,
+                225 => Z1,
+                226 => Z2,
+                227 => Z3,
+                228 => Z4,
+                229 => Z5,
+                230 => Z6,
+                231 => Z7,
+                232 => Z8,
+                233 => Z9,
                 _ => throw new InvalidOperationException()
             };
             Modeladapt(prefubObject);
