@@ -1,0 +1,346 @@
+オブジェクト生成スクリプト
+using UnityEngine;
+
+public class LanguageMaker : MonoBehaviour
+{
+    // キャンバスにアタッチしてください。
+    [Header("出現するオブジェクト。")]
+    public GameObject languageelse;
+    public GameObject languageI;
+    private bool langswitch = true;
+    [Header("出現位置")]
+    public Vector2 spawnAreaMin;
+    public Vector2 spawnAreaMax;
+    [Header("出現位置の半径。文字が重ならないようにするため。")]
+    public float checkRadius = 100f;
+    public LayerMask collisionLayer;
+    [Header("出現するオブジェクトの最大数と試行回数")] 
+    public int MaxIs = 2;
+    public int maxObjects = 10;
+    public int maxAttempts = 100;
+
+    private int currentObjectCount = 0;
+    private int currentIs = 0;
+
+    void Update()
+    {
+        if (currentObjectCount + currentIs <= maxObjects)
+        {
+            if (currentObjectCount + MaxIs == maxObjects)
+            {
+                if (currentIs <= MaxIs)
+                {
+                    //I出現
+                    Debug.Log("Is");
+                    SpawnObject();
+                    langswitch = true;
+                }
+            }
+            else
+            {
+                //オブジェクト出現
+                Debug.Log("else");
+                SpawnObject();
+                langswitch = false;
+            }
+        }
+    }
+
+    public void SpawnObject()
+    {
+        for (int i = 0; i < maxAttempts; i++)
+        {
+            
+            //試行回数が最大数以下ならランダムな位置に出現
+            Vector2 randomPosition = GenerateRandomPosition();
+
+            if (IsPositionValid(randomPosition))
+            {
+                InstantiateObject(randomPosition);
+                return;
+            }
+        }
+    }
+
+    private Vector2 GenerateRandomPosition()
+    {
+        // ランダムな位置を生成
+        return new Vector2(
+            Random.Range(spawnAreaMin.x, spawnAreaMax.x),
+            Random.Range(spawnAreaMin.y, spawnAreaMax.y)
+        );
+    }
+
+    private bool IsPositionValid(Vector2 position)
+    {
+        // 指定した半径内に他のコライダーがないか確認
+        return !Physics2D.OverlapCircle(position, checkRadius, collisionLayer);
+    }
+
+    private void InstantiateObject(Vector2 position)
+    {
+        // オブジェクトを生成
+        if (langswitch == false)
+        {
+            GameObject instance = Instantiate(languageelse, position, Quaternion.identity);
+            instance.transform.SetParent(transform);
+            currentObjectCount++;
+        }
+        else
+        {
+            GameObject instance = Instantiate(languageI, position, Quaternion.identity);
+            instance.transform.SetParent(transform);
+            currentIs++;
+        }
+    }
+}
+文字遷移スクリプト
+using UnityEngine;
+using System;
+using UnityEngine.UI;
+
+public class LanguageModeladapter : MonoBehaviour
+{
+    [Header("Aオブジェクト")]
+    public string A1;
+    [Header("Bオブジェクト")]
+    public string B1;
+    [Header("Iオブジェクト")]
+    public string I1;
+    public string I2;
+    [Header("Iのプレハブである場合はオンにしてください")]
+    public bool Iswitch = false;
+
+    private int Randomnumber;
+    
+    void Start()
+    {
+        if (Iswitch)//IのプレハブならIを。
+        {
+            Randomnumber = UnityEngine.Random.Range(0, 2);
+            var prefubObject = Randomnumber switch
+            {
+                0 => I1,
+                1 => I2,
+                _ => throw new InvalidOperationException()
+            };
+            Modeladapt(prefubObject);
+        }
+        else
+        {
+            Randomnumber = UnityEngine.Random.Range(0, 2);
+            var prefubObject = Randomnumber switch
+            {
+                0 => A1,
+                1 => B1,
+                _ => throw new InvalidOperationException()
+            };
+            Modeladapt(prefubObject);
+        }
+    }
+    public void Modeladapt(string textureName)
+    {
+        Texture2D texture = Resources.Load<Texture2D>($"LANGUAGES/{textureName}");
+        if (texture != null)
+        {
+            // オブジェクトのRendererを取得してテクスチャを適用
+            Image image = GetComponent<Image>();
+            if (image != null)
+            {
+                image.material.mainTexture = texture;
+            }
+            else
+            {
+                Debug.LogError("Rendererが見つかりません。");
+            }
+        }
+        else
+        {
+            Debug.LogError($"画像 '{textureName}' が見つかりません。");
+        }
+    }
+}
+画像の動きスクリプト
+using UnityEngine;
+using System.Collections;
+using UnityEngine.UI;
+
+public class LanguagesMove : MonoBehaviour
+{
+    //プレハブ化させたボタンオブジェクトにアタッチしてください。
+    private const float FadeSpeed = 0.5f;// 出現速度
+    private const float FloatSpeed = 1f;// 上下移動速度
+    private const float FloatHeight = 5f;// 上下移動の高さ
+
+    private Button textimage;
+    private Image buttonImage;
+    private Vector3 initialPosition;// 初期位置
+    private Rigidbody2D rb;
+
+    private LanguageState currentState = LanguageState.Stay;// 現在の状態
+    private int movementType;// 移動タイプ
+    private float waitTime; // 待機時間
+    private float randomSpeed; // ランダムな速度
+    private bool positionUpdated = true; // 位置が更新されたかどうか
+
+    private Vector2 spawnAreaMin; // 出現位置の最小値
+    private Vector2 spawnAreaMax; // 出現位置の最大値
+    
+    
+
+    private enum LanguageState
+    {
+        Normal,
+        Stay,
+        FadeOut
+    }
+
+    void Start()
+    {
+        buttonImage = this.gameObject.GetComponent<Image>();
+        InitializeComponents(); // 初期化処理
+        StartCoroutine(MoveCoroutine()); // 移動コルーチン開始
+        StartFadeIn(); // 濃化開始
+    }
+
+    void Update()
+    {
+        switch (currentState)
+        {
+            // 出現状態
+            case LanguageState.Normal:
+                HandleMovement();
+                break;
+            case LanguageState.FadeOut:
+                HandleFadeOut();
+                break;
+        }
+    }
+
+    private void InitializeComponents()
+    {
+        //初期化処理
+        
+        Transform parentCanvas = transform.parent;
+        LanguageMaker parentScript = parentCanvas.GetComponent<LanguageMaker>();
+
+        textimage = GetComponent<Button>();
+        rb = GetComponent<Rigidbody2D>();
+        initialPosition = transform.position;
+
+        if (parentScript != null)
+        {
+            spawnAreaMin = parentScript.spawnAreaMin;
+            spawnAreaMax = parentScript.spawnAreaMax;
+        }
+
+        randomSpeed = Random.Range(-6, 6);
+    }
+
+    private void StartFadeIn()
+    {
+        StartCoroutine(FadeInCoroutine());
+    }
+
+    private IEnumerator FadeInCoroutine()
+    {
+        // 濃化処理
+        while (buttonImage.color.a < 1)
+        {
+            UpdateAlpha(FadeSpeed * Time.deltaTime);
+            yield return null;
+        }
+        // 濃化完了
+        currentState = LanguageState.Normal;
+        GetComponent<Collider2D>().isTrigger = true;
+    }
+
+    private void HandleMovement()
+    {
+        if (movementType <= 2)
+        {
+            if (movementType == 1)
+            {
+                // 上下移動
+                UpdateInitialPosition();
+                float newY = initialPosition.y + Mathf.Sin(Time.time * FloatSpeed) * FloatHeight;
+                transform.position = new Vector2(initialPosition.x, newY);
+            }
+            else if (movementType == 2)
+            {
+                // 水平方向に移動
+                MoveHorizontally();
+            }
+        }
+        else if (movementType == 3)
+        {
+            // 回転
+            RotateObject();
+        }
+    }
+
+    private void HandleFadeOut()
+    {
+        // フェードアウト処理
+        UpdateAlpha(-FadeSpeed * Time.deltaTime);
+        if (buttonImage.color.a <= 0)
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void UpdateAlpha(float delta)
+    {
+        // 透明度を更新
+        Color color = buttonImage.color;
+        color.a = Mathf.Clamp01(color.a + delta);
+        buttonImage.color = color;
+    }
+
+    private IEnumerator MoveCoroutine()
+    {
+        // 移動コルーチン
+        while (true)
+        {
+            movementType = Random.Range(0, 4);
+            waitTime = GetWaitTime(movementType);
+            yield return new WaitForSeconds(waitTime);
+        }
+    }
+
+    private float GetWaitTime(int moveType)
+    {
+        // 待機時間をランダム化
+        return moveType switch
+        {
+            0 => 7f,
+            1 => 12f,
+            2 => 18f,
+            _ => 10f,
+        };
+    }
+
+    private void UpdateInitialPosition()
+    {
+        // 位置が更新された場合、初期位置を更新
+        if (positionUpdated)
+        {
+            initialPosition = transform.position;
+            positionUpdated = false;
+        }
+    }
+
+    private void MoveHorizontally()
+    {
+        // 水平方向に移動
+        float newX = transform.position.x + (2 * randomSpeed) * Time.deltaTime;
+        newX = Mathf.Clamp(newX, spawnAreaMin.x, spawnAreaMax.x);
+        transform.position = new Vector3(newX, transform.position.y, transform.position.z);
+    }
+
+    private void RotateObject()
+    {
+        // 回転処理
+        transform.Rotate(0, 0, randomSpeed * Time.deltaTime);
+    }
+}
