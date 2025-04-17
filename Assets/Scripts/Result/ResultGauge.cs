@@ -28,7 +28,7 @@ public class ResultGauge : MonoBehaviour
         heightPos = 0;
         pos = rectTransform.position;
         pos.x = xpos;
-        pos.y = -345;
+        pos.y = -431.2f;
         ScoreRatio(score);
 
         scoreFall = text.GetComponent<ScoreFall>();
@@ -55,7 +55,11 @@ public class ResultGauge : MonoBehaviour
         }
         else
         {
-            scoreFall.Fall(score);
+            if (scoreCount > 120)
+            {
+                scoreFall.Fall(score);
+            }
+            scoreCount++;
         }
     }
 
@@ -64,6 +68,6 @@ public class ResultGauge : MonoBehaviour
         float ratio;
         ratio = score / scoreMax;
         Debug.Log(ratio);
-        turnPoint = 689 * ratio;
+        turnPoint = 694 * ratio;
     }
 }

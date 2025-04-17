@@ -48,10 +48,10 @@ Material:
     - _Frequency: 20
     - _Frequency1: 15
     - _Frequency2: 5
-    - _Speed: 4
+    - _Speed: 5
     - _Threshold: -340
-    - _ThresholdMax: 330
-    - _ThresholdMin: -335
+    - _ThresholdMax: 319
+    - _ThresholdMin: -375
     - _ZWrite: 0
     m_Colors:
     - _Color: {r: 1, g: 0.29999995, b: 0, a: 1}
