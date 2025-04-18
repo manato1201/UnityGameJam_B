@@ -9,6 +9,7 @@ public class ResultGauge : MonoBehaviour
 
     private float heightPos;
     private float turnPoint;
+    [SerializeField]private float turnPointMAX;
     [SerializeField] private float turnSpeed;
     private float scoreMax = 100;
     [SerializeField] private float score;
@@ -19,6 +20,8 @@ public class ResultGauge : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI text;
     ScoreFall scoreFall;
+
+    [SerializeField] AudioSource gaugeSound;
 
     int scoreCount = 0;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -32,6 +35,12 @@ public class ResultGauge : MonoBehaviour
         ScoreRatio(score);
 
         scoreFall = text.GetComponent<ScoreFall>();
+
+        if(gaugeSound != null)
+        {
+
+            gaugeSound.Play();
+        }
     }
 
     // Update is called once per frame
@@ -55,6 +64,11 @@ public class ResultGauge : MonoBehaviour
         }
         else
         {
+            if (gaugeSound != null)
+            {
+
+                gaugeSound.Stop();
+            }
             if (scoreCount > 120)
             {
                 scoreFall.Fall(score);
@@ -68,6 +82,6 @@ public class ResultGauge : MonoBehaviour
         float ratio;
         ratio = score / scoreMax;
         Debug.Log(ratio);
-        turnPoint = 694 * ratio;
+        turnPoint = turnPointMAX * ratio;
     }
 }
