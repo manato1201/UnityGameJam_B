@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\Main\RandomMover.cs" />
     <Compile Include="Assets\Scripts\Result\ResultGauge.cs" />
     <Compile Include="Assets\Scripts\DB\WordImage.cs" />
+    <Compile Include="Assets\Scripts\Result\ResultManager.cs" />
     <Compile Include="Assets\Scripts\Main\ShakeByPerlinNoise.cs" />
   </ItemGroup>
   <ItemGroup>
