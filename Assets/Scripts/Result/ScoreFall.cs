@@ -10,11 +10,13 @@ public class ScoreFall : MonoBehaviour
     RectTransform rectTransform;
     Vector2 pos;
     [SerializeField] float speed;
-
+    [SerializeField] AudioSource fallSound;
+    bool soundFlug;
     int up = 0;
     private void Start()
     {
         rectTransform = GetComponent<RectTransform>();
+        soundFlug = true;
         //score.text = "0%";
         pos = rectTransform.position;
         pos.x = 0;
@@ -29,6 +31,11 @@ public class ScoreFall : MonoBehaviour
         { 
             rectTransform.anchoredPosition = pos;
             pos.y -= 0.1f * speed;
+        }
+        if(pos.y <= 20 && soundFlug)
+        {
+            fallSound.PlayOneShot(fallSound.clip);
+            soundFlug=false;
         }
     }
 

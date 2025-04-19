@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: New Material 2
-  m_Shader: {fileID: 10750, guid: 0000000000000000f000000000000000, type: 0}
+  m_Name: ResultGauge
+  m_Shader: {fileID: 4800000, guid: a88cc89a0254afb478dff72715fd34b5, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -41,10 +41,20 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Amplitude: 5
+    - _Amplitude1: 10
+    - _Amplitude2: 5
     - _EnableExternalAlpha: 0
+    - _Frequency: 3.84
+    - _Frequency1: 15
+    - _Frequency2: 5
+    - _Speed: 5
+    - _Threshold: -340
+    - _ThresholdMax: 300
+    - _ThresholdMin: -375
     - _ZWrite: 0
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color: {r: 0.92549026, g: 0.54901963, b: 0.9333334, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
