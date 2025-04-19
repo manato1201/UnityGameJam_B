@@ -3,6 +3,8 @@ using UnityEngine.UI;
 using TMPro;
 using System.Runtime.CompilerServices;
 
+//スコア表示のスクリプト
+
 public class ScoreFall : MonoBehaviour
 {
     [SerializeField]private TextMeshProUGUI score;
@@ -40,23 +42,30 @@ public class ScoreFall : MonoBehaviour
 
     public void Fall(float result)
     {
+        //スコア表示
         score.text = result + "%";
+        //落ちてくる処理
         if (pos.y >= 0)
         { 
             rectTransform.anchoredPosition = pos;
             pos.y -= 0.1f * speed;
         }
+        //落ちてきた後の処理
         if(pos.y <= 20 && soundFlug)
         {
             fallSound.PlayOneShot(fallSound.clip);
             soundFlug=false;
+
+            //80％以上ならハートのエフェクトを出す
             if(result >= 80)
             {
                 loveEffect.SetActive(true);
                 loveSound.PlayOneShot(loveSound.clip);
                 //loveParticle.Play();
             }
-            else if(result <= 20)
+
+            //20％以上なら割れたハートのエフェクトを出す
+            else if (result <= 20)
             {
                 sadEffect.SetActive(true);
                 sadEffect2.SetActive(true);
