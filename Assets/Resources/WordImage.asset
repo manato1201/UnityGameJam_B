@@ -13,14 +13,22 @@ MonoBehaviour:
   m_Name: WordImage
   m_EditorClassIdentifier: 
   ItemSprites:
-  - Name: 
+  - Name: I
     Sprite:
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
-    - {fileID: 0}
+    - {fileID: -2208792547862121981, guid: 98d98fd6c816b8f4987486c785a70599, type: 3}
+    - {fileID: -1930139421354966483, guid: 98d98fd6c816b8f4987486c785a70599, type: 3}
+    - {fileID: -4010962061674759492, guid: 98d98fd6c816b8f4987486c785a70599, type: 3}
+    - {fileID: 1883261155561396291, guid: 98d98fd6c816b8f4987486c785a70599, type: 3}
+    - {fileID: 2428045321358477721, guid: 98d98fd6c816b8f4987486c785a70599, type: 3}
+    - {fileID: 3078197670768578899, guid: 98d98fd6c816b8f4987486c785a70599, type: 3}
+    - {fileID: -3337763100870996696, guid: 98d98fd6c816b8f4987486c785a70599, type: 3}
+    - {fileID: 5389548035995621834, guid: 98d98fd6c816b8f4987486c785a70599, type: 3}
+    - {fileID: 7674309855942277605, guid: 98d98fd6c816b8f4987486c785a70599, type: 3}
+    - {fileID: 1969817843469953489, guid: 98d98fd6c816b8f4987486c785a70599, type: 3}
+    - {fileID: 5404545995946500419, guid: 98d98fd6c816b8f4987486c785a70599, type: 3}
+  - Name: Other
+    Sprite:
+    - {fileID: 5207700867384369339, guid: 98d98fd6c816b8f4987486c785a70599, type: 3}
+    - {fileID: 6534105772380905701, guid: 98d98fd6c816b8f4987486c785a70599, type: 3}
+    - {fileID: -5704180922935872642, guid: 98d98fd6c816b8f4987486c785a70599, type: 3}
+    - {fileID: -8472935840326194723, guid: 98d98fd6c816b8f4987486c785a70599, type: 3}
