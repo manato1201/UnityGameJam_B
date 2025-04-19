@@ -11,7 +11,7 @@ public class ScoreFall : MonoBehaviour
     Vector2 pos;
     [SerializeField] float speed;
     [SerializeField] AudioSource fallSound;
-    bool soundFlug;
+    public bool soundFlug;
     int up = 0;
     private void Start()
     {
