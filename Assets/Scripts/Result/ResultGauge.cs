@@ -76,6 +76,9 @@ public class ResultGauge : MonoBehaviour
     // スコアをパーセントに変換する
     void ScoreRatio(float score)
     {
+        if (Select.isEasy) score *= 2;
+        else if (Select.isHard) score /= 2;
+
         float ratio = score / scoreMax;
         Debug.Log(ratio);
         turnPoint = turnPointMAX * ratio;

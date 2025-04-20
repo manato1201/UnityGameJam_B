@@ -4,6 +4,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine.SceneManagement;
 using DG.Tweening;
 using Transition;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace GM
 {
@@ -61,9 +62,23 @@ namespace GM
         [Header("シェーダートランジションコントローラ")]
         [SerializeField] public ShaderTransitionController shaderTransitionController;
 
-        public GameObject gameObjects;
+        //public GameObject gameObjects;
         private float remainingTime;
-        public static int totalScore;
+        //public static int totalScore;
+        private static float _totalScore = 0;
+
+        public static float totalScore
+        {
+            get => _totalScore;
+            set
+            {
+                int Maxamount = 100;
+                if (Select.isEasy) Maxamount /= 2;
+                else if (Select.isHard) Maxamount *= 2;
+                value = Mathf.Clamp(value, 0, Maxamount);
+                _totalScore = value;
+            }
+        }
         private int currentCombo;
         private float lastIClickTime;
         private float comboDisplayTimer;
@@ -84,19 +99,22 @@ namespace GM
         //void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         //{
         //    // 新シーンの Canvas 内から TextMeshProUGUI を Find
-       
+
         //}
+
+
         void Awake()
         {
-            gameObjects.SetActive(true);
-            scoreText = GameObject.Find("Score")?.GetComponent<TextMeshProUGUI>();
-            timeText = GameObject.Find("Time")?.GetComponent<TextMeshProUGUI>();
-            comboText = GameObject.Find("Combo")?.GetComponent<TextMeshProUGUI>();
-            timeUpText = GameObject.Find("TimeUp")?.GetComponent<TextMeshProUGUI>();
-            shaderTransitionController.ResetTransition();
+            // シングルトンと永続化
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            // シーンロードイベントに登録(常に発火)
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
+
+            // 初期化
             remainingTime = startingTime;
             totalScore = 0;
             currentCombo = 0;
@@ -104,22 +122,65 @@ namespace GM
             comboDisplayTimer = comboDisplayDuration;
             isGameOver = false;
             speedUpApplied = false;
+            timeDecreaseMultiplier = 1f;
 
-            // Easyモード: 指定オブジェクト非表示
-            if (Select.isEasy && easyHideObject != null) easyHideObject.SetActive(false);
-
-            // Hardモード: マテリアルの_ScrollEnabled を1に
-            if (Select.isHard && hardMaterial != null || Select.isEndless) hardMaterial.SetInt("_ScrollEnabled", 1);
-
-            SetupComboAnimation();
-            SetupTimeUpText();
-            UpdateUI();
+            // 難易度別プレ処理
+            if (Select.isEasy && easyHideObject != null)
+                easyHideObject.SetActive(false);
+            if ((Select.isHard && hardMaterial != null) || Select.isEndless)
+                hardMaterial?.SetInt("_ScrollEnabled", 1);
             if (Select.isEasy) scoreThreshold = 50;
             if (Select.isNormal) scoreThreshold = 100;
             if (Select.isHard) scoreThreshold = 200;
+            
+           
+            shaderTransitionController?.ResetTransition();
+            SetupComboAnimation();
+            SetupTimeUpText();
         }
 
-       
+        void Start()
+        {
+            // 初回シーン用バインド
+            BindUIIfMain();
+        }
+
+        void OnDestroy()
+        {
+            // イベント解除
+            SceneManager.sceneLoaded -= OnSceneLoaded;
+            SceneManager.sceneUnloaded -= OnSceneUnloaded;
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            BindUIIfMain();
+        }
+        private void OnSceneUnloaded(Scene scene)
+        {
+            if (scene.name == "Main")
+            {
+                scoreText = null;
+                timeText = null;
+                comboText = null;
+                timeUpText = null;
+            }
+        }
+
+        // MainSceneのみUIを再取得
+        private void BindUIIfMain()
+        {
+            if (SceneManager.GetActiveScene().name != "Main")
+                return;
+            scoreText = GameObject.Find("Score")?.GetComponent<TextMeshProUGUI>();
+            timeText = GameObject.Find("Time")?.GetComponent<TextMeshProUGUI>();
+            comboText = GameObject.Find("Combo")?.GetComponent<TextMeshProUGUI>();
+            timeUpText = GameObject.Find("TimeUp")?.GetComponent<TextMeshProUGUI>();
+            UpdateUI();
+        }
+
+
+
 
         void Update()
         {
@@ -129,7 +190,7 @@ namespace GM
             if (!Select.isEndless)
             {
                 // スコア閾値超過でタイマー加速
-                if (!speedUpApplied && totalScore > scoreThreshold)
+                if (!speedUpApplied && totalScore >= scoreThreshold)
                 {
                     totalScore = 100;
                     timeDecreaseMultiplier = 30f;
@@ -173,6 +234,10 @@ namespace GM
             }
         }
 
+
+       
+
+
         public void IClicked()
         {
             if (isGameOver) return;
@@ -202,6 +267,7 @@ namespace GM
             }
         }
 
+
         public void NonIClicked()
         {
             if (isGameOver) return;
@@ -216,20 +282,32 @@ namespace GM
 
         public void GameOver()
         {
-           // if (Select.isEasy) totalScore = 100;
-            if (Select.isHard) totalScore /=2;
+           
+            
             isGameOver = true;
             Time.timeScale = 0f;
             ShowTimeUpAnimation();
             Time.timeScale = 1f;
             // 入力待ちでシーン遷移
             WaitForAnyInputAndTransitionAsync().Forget();
-            gameObjects.SetActive(false);
+            //gameObjects.SetActive(false);
             Debug.Log($"Game Over! Final Score: {totalScore}");
         }
 
         private void UpdateUI()
         {
+            //if(scoreText!=null)scoreText.text =totalScore.ToString();
+            remainingTime = startingTime;
+            totalScore = 0;
+            currentCombo = 0;
+            lastIClickTime = -comboWindow;
+            comboDisplayTimer = comboDisplayDuration;
+            isGameOver = false;
+            speedUpApplied = false;
+            timeDecreaseMultiplier = 1f;
+            timeUpText.gameObject.SetActive(false);
+            shaderTransitionController?.ResetTransition();
+
             UpdateScoreUI();
             UpdateTimeUI();
             UpdateComboUI();
@@ -241,11 +319,12 @@ namespace GM
         private void UpdateScoreUI()
         {
             if (!scoreText) return;
-            int displayScore = totalScore;
+            int displayScore = (int)totalScore;
             if (Select.isEasy) displayScore *= 2;
             else if (Select.isHard) displayScore /= 2;
             scoreText.text = $"{displayScore} %";
         }
+
         private void UpdateTimeUI() { if (timeText) timeText.text = $"Time: {remainingTime:F1}"; }
         private void UpdateComboUI() { if (comboText) comboText.text = currentCombo > 1 ? $"Combo x{currentCombo}!" : string.Empty; }
 

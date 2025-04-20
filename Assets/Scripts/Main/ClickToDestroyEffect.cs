@@ -59,8 +59,8 @@ public class ClickToDestroyEffect : MonoBehaviour
             if (transitionMaterial != null)
             {
                 float v = transitionMaterial.GetFloat("_Value");
-                transitionMaterial.SetFloat("_Value", v - valueDecrease);
-                if (v==0) GameManager.Instance.GameOver();
+                transitionMaterial.SetFloat("_Value", v -= valueDecrease);
+                if (v<=0) GameManager.Instance.GameOver();
 
 
 
