@@ -8,8 +8,8 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Transition_Crystal
-  m_Shader: {fileID: 4800000, guid: e10ae99f75acf1f408a7af89e8ad9f72, type: 3}
-  m_Parent: {fileID: 0}
+  m_Shader: {fileID: 4800000, guid: 51e7627c7b296e94c81805269ff73083, type: 3}
+  m_Parent: {fileID: 2100000, guid: 35b6ec549c03daf43b9529d9844984d4, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -22,37 +22,11 @@ Material:
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs:
-    - _AlphaTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MainTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _MaskTex:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    - _NormalMap:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+    m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _Div: 16
-    - _EnableExternalAlpha: 0
-    - _Inverse: 0
-    - _Seed: 5
-    - _Size: 12
-    - _Smoothing: 0.175
-    - _Value: 0.795
-    - _Width: 0.707
-    m_Colors:
-    - _Color: {r: 0.08627451, g: 0.36862746, b: 0.5137255, a: 1}
-    - _Dir: {r: 1, g: 1, b: 0, a: 0}
-    - _Flip: {r: 1, g: 1, b: 1, a: 1}
-    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _Smoothing: 0.5
+    - _Value: 0.723
+    m_Colors: []
   m_BuildTextureStacks: []
   m_AllowLocking: 1

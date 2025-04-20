@@ -1,49 +1,67 @@
 ﻿using UnityEngine;
 using Cysharp.Threading.Tasks;
+using System.Collections.Generic;
+using GM;
 
 public class ClickToDestroyEffect : MonoBehaviour
 {
-    public GameObject effectPrefab; // エフェクト用のプレハブ
-    public AudioClip sound;         // クリック時の音声
+    public GameObject effectPrefab;      // エフェクト用のプレハブ
+    public AudioClip sound;              // クリック時の音声
+    public Material transitionMaterial;  // Sad時に操作するマテリアル
+    public float valueDecrease = 0.1f;   // Sad時に減少させる値
+
     private AudioSource audioSource;
-
-    // フラッシュ用の設定
     public Color flashColor = Color.yellow; // フラッシュ時の色
-    public float flashDuration = 0.1f;        // フラッシュ時間（秒）
+    public float flashDuration = 0.1f;      // フラッシュ時間（秒）
+   
 
-    private Color originalColor;              // 元の色
 
     void Start()
     {
-        // AudioSourceはメインカメラにアタッチされている前提
         audioSource = Camera.main.GetComponent<AudioSource>();
-        // Rendererがある場合、元の色を保存
-        Renderer rend = GetComponent<Renderer>();
-        if (rend != null)
-        {
-            originalColor = rend.material.color;
-        }
     }
 
     void OnMouseDown()
     {
-        // エフェクト生成
+        // 共通：エフェクト生成＆音再生
         if (effectPrefab != null)
-        {
             Instantiate(effectPrefab, transform.position, Quaternion.identity);
-        }
-
-        // 音再生
         if (sound != null && audioSource != null)
-        {
             audioSource.PlayOneShot(sound);
-        }
 
-        // タグが "Love" の場合はフラッシュ処理を行う
+        // タグ判定
         if (gameObject.tag == "Love")
         {
-            // asyncメソッドは UniTaskVoid で呼び出し、返り値を無視するため .Forget() を利用
-            FlashAndDestroyAsync().Forget();
+            Debug.Log("Love");
+            if (transitionMaterial != null)
+            {
+                float v = transitionMaterial.GetFloat("_Value");
+                transitionMaterial.SetFloat("_Value", v + valueDecrease);
+            }
+            // Iタグのオブジェクトの回転・移動を停止
+            var iObjects = GameObject.FindGameObjectsWithTag("I");
+            foreach (var obj in iObjects)
+            {
+                var mover = obj.GetComponent<RandomMover>();
+                if (mover != null)
+                    mover.enabled = false;
+            }
+           // FlashIObjectsAsync().Forget();
+            Destroy(gameObject);
+        }
+        else if (gameObject.tag == "Sad")
+        {
+            Debug.Log("Sad");
+            if (transitionMaterial != null)
+            {
+                float v = transitionMaterial.GetFloat("_Value");
+                transitionMaterial.SetFloat("_Value", v - valueDecrease);
+            }
+            Destroy(gameObject);
+        }
+        else if (gameObject.tag == "I") {
+            GameManager.Instance.IClicked();
+            Destroy(gameObject);
         }
         else
         {
@@ -51,26 +69,36 @@ public class ClickToDestroyEffect : MonoBehaviour
         }
     }
 
-    // async/awaitを利用してフラッシュ処理後にオブジェクトを破棄する
-    async UniTaskVoid FlashAndDestroyAsync()
+    // "I" タグのオブジェクト全てを一瞬フラッシュさせる
+    async UniTaskVoid FlashIObjectsAsync()
     {
-        Renderer rend = GetComponent<Renderer>();
-        if (rend != null)
+
+      
+
+        var objs = GameObject.FindGameObjectsWithTag("I");
+        var rends = new List<Renderer>();
+        var originals = new List<Color>();
+
+        Debug.Log("LoveLove");
+        // 色を変更
+        foreach (var obj in objs)
         {
-            // フラッシュ用に色を変更
-            rend.material.color = flashColor;
+            var rend = obj.GetComponent<Renderer>();
+            if (rend != null)
+            {
+                rends.Add(rend);
+                originals.Add(rend.material.color);
+                rend.material.color = flashColor;
+            }
         }
 
-        // flashDuration 秒（ミリ秒に変換）待つ
+        // 指定時間待機
         await UniTask.Delay((int)(flashDuration * 1000));
-
-        // （必要なら）元の色に戻す
-        if (rend != null)
+        
+        // 元に戻す
+        for (int i = 0; i < rends.Count; i++)
         {
-            rend.material.color = originalColor;
+            rends[i].material.color = originals[i];
         }
-
-        // オブジェクトを破棄
-        Destroy(gameObject);
     }
 }
