@@ -1,11 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using Cysharp.Threading.Tasks;
+using Transition;
 
 public class TitleManager : MonoBehaviour
 {
     [SerializeField] GameObject[] Effect;
     [SerializeField] Button startButton;
+    [SerializeField] private ShaderTransitionController shaderTransitionController;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -31,11 +34,23 @@ public class TitleManager : MonoBehaviour
         Effect[2].SetActive(true);
         Effect[3].SetActive(true);
 
-        Invoke("GoToMain", 2.0f);
+        
+        GoToMain().Forget();
     }
 
-    void GoToMain()
+    public void EffectOff()
     {
-        SceneManager.LoadSceneAsync("Main");
+
+    }
+
+
+
+    public async UniTask  GoToMain()
+    {
+        await UniTask.Delay(2000);
+        await shaderTransitionController.StartTransition();
+
+        await SceneManager.LoadSceneAsync("Main");
+        await shaderTransitionController.EndTransition();
     }
 }
