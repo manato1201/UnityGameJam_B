@@ -29,6 +29,7 @@ public class SceneTransitionManager : MonoBehaviour
     [Header("ボタンの音")]
     [SerializeField] AudioSource buttonSound;
 
+    [Header("タイトル用（別のシーンではNull可）")]
     [SerializeField] GameObject IObject;
     Vector3 IscaleChange = new Vector3(0,0,0);
     void Start()
@@ -68,8 +69,8 @@ public class SceneTransitionManager : MonoBehaviour
     private async UniTask PerformTransitionAsync(string sceneName)
     {
         buttonSound.Play();
-        IObject.transform.localScale = IscaleChange;
-        
+        if(IObject != null)
+            IObject.transform.localScale = IscaleChange;
 
         // 遅延
         await UniTask.Delay((int)(transitionDelay * 1000));
