@@ -11,7 +11,7 @@ namespace DB {
 
         #region QOL向上処理
         // CakeParamsSOが保存してある場所のパス
-        public const string PATH = "DB_Item";
+        public const string PATH = "WordImage";
 
         // CakeParamsDBの実体
         private static WordImage _entity = null;
