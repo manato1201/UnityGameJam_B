@@ -5,7 +5,7 @@ using GM;
 
 public class ClickToDestroyEffect : MonoBehaviour
 {
-    public GameObject effectPrefab;      // エフェクト用のプレハブ
+    public GameObject effectPrefab;      // エフェクト用のプレハブ]
     public AudioClip sound;              // クリック時の音声
     public Material transitionMaterial;  // Sad時に操作するマテリアル
     public float valueDecrease = 0.1f;   // Sad時に減少させる値
@@ -32,6 +32,7 @@ public class ClickToDestroyEffect : MonoBehaviour
         // タグ判定
         if (gameObject.tag == "Love")
         {
+            audioSource.PlayOneShot(sound);
             Debug.Log("Love");
             if (transitionMaterial != null)
             {
@@ -46,11 +47,13 @@ public class ClickToDestroyEffect : MonoBehaviour
                 if (mover != null)
                     mover.enabled = false;
             }
-           // FlashIObjectsAsync().Forget();
-            Destroy(gameObject);
+            // FlashIObjectsAsync().Forget();
+                Destroy(gameObject);
         }
         else if (gameObject.tag == "Sad")
         {
+
+            audioSource.PlayOneShot(sound);
             Debug.Log("Sad");
             
             if (transitionMaterial != null)
@@ -62,15 +65,17 @@ public class ClickToDestroyEffect : MonoBehaviour
 
 
             }
-            Destroy(gameObject);
+                Destroy(gameObject);
         }
         else if (gameObject.tag == "I") {
+            audioSource.PlayOneShot(sound);
             GameManager.Instance.IClicked();
-            Destroy(gameObject);
+                Destroy(gameObject);
         }
         else
         {
-            Destroy(gameObject);
+            audioSource.PlayOneShot(sound);
+                Destroy(gameObject);
         }
     }
 

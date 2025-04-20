@@ -105,6 +105,9 @@ MonoBehaviour:
   moveSpeed: 1
   maxRotationSpeed: 90
   directionChangeInterval: 2
+  endlessMoveSpeed: 2
+  endlessMaxRotationSpeed: 90
+  endlessDirectionChangeInterval: 3
   xMin: -6
   xMax: 6
   yMin: -3
@@ -122,7 +125,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   effectPrefab: {fileID: 0}
-  sound: {fileID: 0}
+  audio: {fileID: 0}
+  sound: {fileID: 8300000, guid: 335291ca2b679454f87776f006baddb7, type: 3}
   transitionMaterial: {fileID: 2100000, guid: 35b6ec549c03daf43b9529d9844984d4, type: 2}
   valueDecrease: 0.1
   flashColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
