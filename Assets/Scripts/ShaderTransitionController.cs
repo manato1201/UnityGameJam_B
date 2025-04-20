@@ -79,7 +79,7 @@ namespace Transition
         public void ResetTransition()
         {
             isTransitioning = false;
-            Value = 0.75f;
+            Value = 1.0f;
             transitionMaterial.SetFloat("_Value", Value);
         }
     }

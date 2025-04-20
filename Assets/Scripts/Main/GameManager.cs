@@ -13,6 +13,26 @@ namespace GM
         // シングルトンパターンの実装
         public static GameManager Instance { get; private set; }
 
+        //[Header("難易度設定 (いずれかtrueにする)")]
+        //public bool isEasy;
+        //public bool isNormal;
+        //public bool isHard;
+        //public bool isEndless;
+
+        [Header("スコア閾値 (超えたらタイマー10倍)")]
+        public int scoreThreshold = 100;
+
+        [Header("Easyモード: 非表示にするオブジェクト")]
+        public GameObject easyHideObject;
+
+        [Header("Hardモード: _ScrollEnabled を設定するマテリアル")]
+        public Material hardMaterial;
+
+        [Header("Endlessモード: _Value を減少させるマテリアル")]
+        public Material endlessMaterial;
+        [Tooltip("Endlessモード時に_Valueを毎秒どれだけ減らすか")] public float endlessValueDecreaseSpeed = 0.1f;
+
+
         [Header("ゲーム設定")]
         public float startingTime = 60f;
         public float comboWindow = 1f;
@@ -47,18 +67,22 @@ namespace GM
         private float lastIClickTime;
         private float comboDisplayTimer;
         private bool isGameOver;
+        private bool speedUpApplied;
+        // 時間減少速度倍率（スコア閾値超過で変更）
+        private float timeDecreaseMultiplier = 1f;
 
         private Tween normalComboTween;
         private Tween fiveComboTween;
 
         void Awake()
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
+            shaderTransitionController.ResetTransition();
+            if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
+            DontDestroyOnLoad(gameObject);
+            if (Select.isEasy) scoreThreshold = 50;
+            if (Select.isNormal) scoreThreshold = 100;
+            if (Select.isHard) scoreThreshold = 200;
         }
 
         void Start()
@@ -69,26 +93,55 @@ namespace GM
             lastIClickTime = -comboWindow;
             comboDisplayTimer = comboDisplayDuration;
             isGameOver = false;
-            shaderTransitionController.ResetTransition();
+            speedUpApplied = false;
+
+            // Easyモード: 指定オブジェクト非表示
+            if (Select.isEasy && easyHideObject != null) easyHideObject.SetActive(false);
+
+            // Hardモード: マテリアルの_ScrollEnabled を1に
+            if (Select.isHard && hardMaterial != null|| Select.isEndless) hardMaterial.SetInt("_ScrollEnabled", 1);
+            
             SetupComboAnimation();
             SetupTimeUpText();
             UpdateUI();
+            if (Select.isEasy) scoreThreshold = 50;
+            if (Select.isNormal) scoreThreshold = 100;
+            if (Select.isHard) scoreThreshold = 200;
+            
         }
 
         void Update()
         {
             if (isGameOver) return;
 
-            // タイマー
-            if (remainingTime > 0f)
+            // Endlessモード以外のタイマー
+            if (!Select.isEndless)
             {
-                remainingTime -= Time.deltaTime;
+                // スコア閾値超過でタイマー加速
+                if (!speedUpApplied && totalScore > scoreThreshold)
+                {
+                    timeDecreaseMultiplier = 30f;
+                    speedUpApplied = true;
+                }
+
+                // 残り時間減少（倍率適用）
+                remainingTime -= Time.deltaTime * timeDecreaseMultiplier;
                 remainingTime = Mathf.Max(remainingTime, 0f);
                 UpdateTimeUI();
+
+                if (remainingTime <= 0f) GameOver();
             }
-            if (remainingTime <= 0f && !isGameOver)
+            else
             {
-                GameOver();
+                // Endlessモード: マテリアルの _Value を減少
+                if (endlessMaterial != null)
+                {
+                    float v = endlessMaterial.GetFloat("_Value");
+                    v -= endlessValueDecreaseSpeed * Time.deltaTime;
+                    endlessMaterial.SetFloat("_Value", v);
+                    //timeText.text = $"Value: {v:F2}";
+                    if (v <= 0f) GameOver();
+                }
             }
 
             // コンボリセット判定
@@ -120,7 +173,7 @@ namespace GM
 
             int bonusPoints = baseScore * currentCombo;
             totalScore += bonusPoints;
-            remainingTime += bonusTimePerCombo * currentCombo;
+            if (!Select.isEndless) remainingTime += bonusTimePerCombo * currentCombo;
 
             UpdateScoreUI();
             UpdateTimeUI();
@@ -234,6 +287,7 @@ namespace GM
             //if (shaderTransitionController != null)
             await shaderTransitionController.EndTransition();
         }
+        
 
     }
 }
