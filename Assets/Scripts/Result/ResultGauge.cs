@@ -1,49 +1,48 @@
-using System.Runtime.CompilerServices;
+ï»¿using System.Runtime.CompilerServices;
+using GM;
 using JetBrains.Annotations;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-//ƒQ[ƒW‚ª‚¾‚ñ‚¾‚ñã‚ª‚Á‚Ä‚¢‚­ƒXƒNƒŠƒvƒg
-
-
+// ã‚²ãƒ¼ã‚¸ãŒã ã‚“ã ã‚“ä¸ŠãŒã£ã¦ã„ãã‚¹ã‚¯ãƒªãƒ—ãƒˆ
 public class ResultGauge : MonoBehaviour
 {
-
     private float heightPos;
     private float turnPoint;
-    [SerializeField]private float turnPointMAX;
+    [SerializeField] private float turnPointMAX;
     [SerializeField] private float turnSpeed;
     private float scoreMax = 100;
     [SerializeField] private float score;
     [SerializeField] private float xpos;
 
-    RectTransform rectTransform;
-    Vector2 pos;
+    private RectTransform rectTransform;
+    private Vector2 pos;
 
     [SerializeField] private TextMeshProUGUI text;
-    ScoreFall scoreFall;
+    private ScoreFall scoreFall;
 
-    [SerializeField] AudioSource gaugeSound;
+    [SerializeField] private AudioSource gaugeSound;
 
-    int scoreCount = 0;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private int scoreCount = 0;
+
+    // Awake is called when the script instance is being loaded
+    void Awake()
     {
-        rectTransform = gameObject.GetComponent<RectTransform>();
-        heightPos = 0;
+        rectTransform = GetComponent<RectTransform>();
+        heightPos = 0f;
         pos = rectTransform.position;
         pos.x = xpos;
         pos.y = -431.2f;
 
-        //ƒƒCƒ“ƒV[ƒ“‚©‚çƒXƒRƒA‚ğæ“¾‚Å‚«‚é‚æ‚¤‚É‚È‚Á‚½‚çíœ‚·‚é
-        ScoreRatio(score);
+
+        // ãƒ¡ã‚¤ãƒ³ã‚·ãƒ¼ãƒ³ã‹ã‚‰ã‚¹ã‚³ã‚¢ã‚’å–å¾—ã§ãã‚‹ã‚ˆã†ã«ãªã£ãŸã‚‰å‰Šé™¤ã™ã‚‹
+        ScoreRatio(GameManager.totalScore);
 
         scoreFall = text.GetComponent<ScoreFall>();
 
-        if(gaugeSound != null)
+        if (gaugeSound != null)
         {
-
             gaugeSound.Play();
         }
     }
@@ -51,43 +50,33 @@ public class ResultGauge : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Œ»İ‚ÌƒQ[ƒW‚Ì‚‚³‚ª~‚Ü‚é‚‚³‚æ‚è’á‚¢
+        // ç¾åœ¨ã®ã‚²ãƒ¼ã‚¸ã®é«˜ã•ãŒæ­¢ã¾ã‚‹é«˜ã•ã‚ˆã‚Šä½ã„æ™‚
         if (heightPos <= turnPoint)
         {
-
             pos.y += 0.05f * turnSpeed;
             heightPos += 0.1f * turnSpeed;
 
             rectTransform.anchoredPosition = pos;
             rectTransform.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, heightPos);
-
-            //if (scoreCount > 20)
-            //{
-            //    scoreFall.ScoreUp(score);
-            //    scoreCount = 0;
-            //}
-            //scoreCount++;
         }
         else
         {
             if (gaugeSound != null)
             {
-
                 gaugeSound.Stop();
             }
             if (scoreCount > 120)
             {
-                scoreFall.Fall(score);
+                scoreFall.Fall(GameManager.totalScore);
             }
             scoreCount++;
         }
     }
 
-    //ƒXƒRƒA‚ğƒp[ƒZƒ“ƒg‚É•ÏŠ·‚·‚é
+    // ã‚¹ã‚³ã‚¢ã‚’ãƒ‘ãƒ¼ã‚»ãƒ³ãƒˆã«å¤‰æ›ã™ã‚‹
     void ScoreRatio(float score)
     {
-        float ratio;
-        ratio = score / scoreMax;
+        float ratio = score / scoreMax;
         Debug.Log(ratio);
         turnPoint = turnPointMAX * ratio;
     }

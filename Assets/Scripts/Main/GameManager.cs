@@ -62,7 +62,7 @@ namespace GM
         [SerializeField] private ShaderTransitionController shaderTransitionController;
 
         private float remainingTime;
-        private int totalScore;
+        public static int totalScore;
         private int currentCombo;
         private float lastIClickTime;
         private float comboDisplayTimer;
@@ -80,13 +80,6 @@ namespace GM
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
             DontDestroyOnLoad(gameObject);
-            if (Select.isEasy) scoreThreshold = 50;
-            if (Select.isNormal) scoreThreshold = 100;
-            if (Select.isHard) scoreThreshold = 200;
-        }
-
-        void Start()
-        {
             remainingTime = startingTime;
             totalScore = 0;
             currentCombo = 0;
@@ -99,16 +92,17 @@ namespace GM
             if (Select.isEasy && easyHideObject != null) easyHideObject.SetActive(false);
 
             // Hardモード: マテリアルの_ScrollEnabled を1に
-            if (Select.isHard && hardMaterial != null|| Select.isEndless) hardMaterial.SetInt("_ScrollEnabled", 1);
-            
+            if (Select.isHard && hardMaterial != null || Select.isEndless) hardMaterial.SetInt("_ScrollEnabled", 1);
+
             SetupComboAnimation();
             SetupTimeUpText();
             UpdateUI();
             if (Select.isEasy) scoreThreshold = 50;
             if (Select.isNormal) scoreThreshold = 100;
             if (Select.isHard) scoreThreshold = 200;
-            
         }
+
+       
 
         void Update()
         {
@@ -120,6 +114,7 @@ namespace GM
                 // スコア閾値超過でタイマー加速
                 if (!speedUpApplied && totalScore > scoreThreshold)
                 {
+                    totalScore = 100;
                     timeDecreaseMultiplier = 30f;
                     speedUpApplied = true;
                 }
@@ -202,7 +197,7 @@ namespace GM
             UpdateComboUI();
         }
 
-        private void GameOver()
+        public void GameOver()
         {
             isGameOver = true;
             Time.timeScale = 0f;
@@ -220,7 +215,17 @@ namespace GM
             UpdateComboUI();
         }
 
-        private void UpdateScoreUI() { if (scoreText) scoreText.text = $"{totalScore} %"; }
+        
+
+        // 難易度に応じたスコア表示
+        private void UpdateScoreUI()
+        {
+            if (!scoreText) return;
+            int displayScore = totalScore;
+            if (Select.isEasy) displayScore *= 2;
+            else if (Select.isHard) displayScore /= 2;
+            scoreText.text = $"{displayScore} %";
+        }
         private void UpdateTimeUI() { if (timeText) timeText.text = $"Time: {remainingTime:F1}"; }
         private void UpdateComboUI() { if (comboText) comboText.text = currentCombo > 1 ? $"Combo x{currentCombo}!" : string.Empty; }
 

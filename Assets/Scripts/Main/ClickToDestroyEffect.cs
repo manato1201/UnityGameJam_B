@@ -52,10 +52,15 @@ public class ClickToDestroyEffect : MonoBehaviour
         else if (gameObject.tag == "Sad")
         {
             Debug.Log("Sad");
+            
             if (transitionMaterial != null)
             {
                 float v = transitionMaterial.GetFloat("_Value");
                 transitionMaterial.SetFloat("_Value", v - valueDecrease);
+                if (v==0) GameManager.Instance.GameOver();
+
+
+
             }
             Destroy(gameObject);
         }
