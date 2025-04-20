@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
+using System.Collections;
 public class ResultManager : MonoBehaviour
 {
     [SerializeField] private GameObject Score;
@@ -8,6 +10,7 @@ public class ResultManager : MonoBehaviour
     [SerializeField] private GameObject panel;
     [SerializeField] private Button restartButton;
     [SerializeField] private Button titleButton;
+    [SerializeField] private AudioSource buttonSound;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -15,6 +18,8 @@ public class ResultManager : MonoBehaviour
         scoreFall = Score.GetComponent<ScoreFall>();
         panel.SetActive(false);
         Debug.Log(scoreFall.soundFlug);
+        restartButton.onClick.AddListener(GotoRestart);
+        restartButton.onClick.AddListener(GotoTitle);
     }
 
     // Update is called once per frame
@@ -27,17 +32,22 @@ public class ResultManager : MonoBehaviour
                 panel.SetActive(true);
             }
         }
-
-        restartButton.onClick.AddListener(GotoRestart);
-        restartButton.onClick.AddListener(GotoTitle);
+        
     }
 
     void GotoRestart()
     {
-       // SceneManager.LoadScene(/*メインシーン*/);
+        StartCoroutine(PlaySoundAndChangeScene("Select"));
     }
     void GotoTitle()
     {
-        SceneManager.LoadScene("Title");
+        StartCoroutine(PlaySoundAndChangeScene("Title"));
+    }
+
+    IEnumerator PlaySoundAndChangeScene(string SceneName)
+    {
+        buttonSound.Play(); // 効果音を再生
+        yield return new WaitForSeconds(buttonSound.clip.length); // 効果音が終わるのを待つ
+        SceneManager.LoadScene(SceneName); // シーンを遷移
     }
 }
