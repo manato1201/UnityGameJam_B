@@ -28,8 +28,8 @@ public class ResultManager : MonoBehaviour
             }
         }
 
-        //restartButton.onClick.AddListener(GotoRestart);
-        //restartButton.onClick.AddListener(GotoTitle);
+        restartButton.onClick.AddListener(GotoRestart);
+        restartButton.onClick.AddListener(GotoTitle);
     }
 
     void GotoRestart()
@@ -38,6 +38,6 @@ public class ResultManager : MonoBehaviour
     }
     void GotoTitle()
     {
-       // SceneManager.LoadScene(/*タイトルシーン*/);
+        SceneManager.LoadScene("Title");
     }
 }

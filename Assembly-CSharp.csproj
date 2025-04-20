@@ -63,6 +63,7 @@
   <ItemGroup>
     <Compile Include="Assets\Scripts\Result\ScoreFall.cs" />
     <Compile Include="Assets\Scripts\Main\ClickToDestroyEffect.cs" />
+    <Compile Include="Assets\Scripts\Title\TitleManager.cs" />
     <Compile Include="Assets\Scripts\Main\RandomSpawner.cs" />
     <Compile Include="Assets\Scripts\ShaderTransitionController.cs" />
     <Compile Include="Assets\Scripts\Main\GameManager.cs" />
