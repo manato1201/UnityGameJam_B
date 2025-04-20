@@ -7,6 +7,15 @@ public class Select : MonoBehaviour
     public static bool isNormal;
     public static bool isHard;
     public static bool isEndless;
+
+    private void Awake()
+    {
+        isEasy = false;
+        isNormal = false;
+        isHard=false;
+        isEndless = false;
+    }
+
     /// <summary>
     /// SelectScene のボタンから難易度設定
     /// </summary>
