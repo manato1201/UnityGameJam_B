@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
+using GM;
 
 public class ClickToDestroyEffect : MonoBehaviour
 {
@@ -49,6 +50,10 @@ public class ClickToDestroyEffect : MonoBehaviour
                 float v = transitionMaterial.GetFloat("_Value");
                 transitionMaterial.SetFloat("_Value", v - valueDecrease);
             }
+            Destroy(gameObject);
+        }
+        else if (gameObject.tag == "I") {
+            GameManager.Instance.IClicked();
             Destroy(gameObject);
         }
         else
