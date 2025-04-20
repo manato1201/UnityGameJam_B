@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
@@ -17,12 +17,12 @@ public class TitleManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        startButton.onClick.AddListener(EffectOn);
-    }
+    //void Update()
+    //{
+    //    startButton.onClick.AddListener(EffectOn);
+    //}
 
-    void EffectOn()
+    public void EffectOn()
     {
 
         //SceneManager.LoadScene("Main");
