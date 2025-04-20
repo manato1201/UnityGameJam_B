@@ -45,10 +45,10 @@ namespace GM
         [SerializeField] private float comboDisplayDuration = 2f;
 
         [Header("UI表示（TextMeshPro）")]
-        [SerializeField] private TextMeshProUGUI scoreText;
-        [SerializeField] private TextMeshProUGUI timeText;
-        [SerializeField] private TextMeshProUGUI comboText;
-        [SerializeField] private TextMeshProUGUI timeUpText;
+        [SerializeField] public TextMeshProUGUI scoreText;
+        [SerializeField] public TextMeshProUGUI timeText;
+        [SerializeField] public TextMeshProUGUI comboText;
+        [SerializeField] public TextMeshProUGUI timeUpText;
 
         [Header("アニメーション設定")]
         [SerializeField] private float normalScale = 1.5f;
@@ -59,8 +59,9 @@ namespace GM
         [SerializeField] private float timeUpDuration = 1f;
 
         [Header("シェーダートランジションコントローラ")]
-        [SerializeField] private ShaderTransitionController shaderTransitionController;
+        [SerializeField] public ShaderTransitionController shaderTransitionController;
 
+        public GameObject gameObjects;
         private float remainingTime;
         public static int totalScore;
         private int currentCombo;
@@ -74,8 +75,24 @@ namespace GM
         private Tween normalComboTween;
         private Tween fiveComboTween;
 
+
+        //void OnEnable()
+        //{
+        //    SceneManager.sceneLoaded += OnSceneLoaded;
+        //}
+
+        //void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        //{
+        //    // 新シーンの Canvas 内から TextMeshProUGUI を Find
+       
+        //}
         void Awake()
         {
+            gameObjects.SetActive(true);
+            scoreText = GameObject.Find("Score")?.GetComponent<TextMeshProUGUI>();
+            timeText = GameObject.Find("Time")?.GetComponent<TextMeshProUGUI>();
+            comboText = GameObject.Find("Combo")?.GetComponent<TextMeshProUGUI>();
+            timeUpText = GameObject.Find("TimeUp")?.GetComponent<TextMeshProUGUI>();
             shaderTransitionController.ResetTransition();
             if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
@@ -199,12 +216,15 @@ namespace GM
 
         public void GameOver()
         {
+           // if (Select.isEasy) totalScore = 100;
+            if (Select.isHard) totalScore /=2;
             isGameOver = true;
             Time.timeScale = 0f;
             ShowTimeUpAnimation();
             Time.timeScale = 1f;
             // 入力待ちでシーン遷移
             WaitForAnyInputAndTransitionAsync().Forget();
+            gameObjects.SetActive(false);
             Debug.Log($"Game Over! Final Score: {totalScore}");
         }
 
@@ -292,7 +312,7 @@ namespace GM
             //if (shaderTransitionController != null)
             await shaderTransitionController.EndTransition();
         }
-        
 
+       
     }
 }
