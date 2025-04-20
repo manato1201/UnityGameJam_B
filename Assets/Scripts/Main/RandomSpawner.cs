@@ -46,7 +46,7 @@ public class RandomSpawner : MonoBehaviour
         if (isPaused)
         {
             // 全てのオブジェクトが消えたら再開
-            if (spawnedObjects.Count == 10)
+            if (spawnedObjects.Count == 25)
             {
                 isPaused = false;
             }
@@ -68,6 +68,9 @@ public class RandomSpawner : MonoBehaviour
         // 通常のタイマー処理
         for (int i = 0; i < objectPrefabs.Count; i++)
         {
+            // Easyモード: 3番目と4番目のプレハブを生成しない
+            if (Select.isEasy && (i == 2 || i == 3))continue;
+
             timers[i] += Time.deltaTime;
             if (timers[i] >= spawnIntervals[i])
             {

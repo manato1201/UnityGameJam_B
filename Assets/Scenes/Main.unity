@@ -1091,7 +1091,7 @@ MonoBehaviour:
   - 5
   - 3
   spawnRange: 5
-  maxActiveObjects: 35
+  maxActiveObjects: 50
 --- !u!4 &1047247672
 Transform:
   m_ObjectHideFlags: 0
@@ -1216,6 +1216,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 594524116bd3af845893e93db5b02fea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  scoreThreshold: 100
+  easyHideObject: {fileID: 454204779}
+  hardMaterial: {fileID: 2100000, guid: 80732c6bbe40b604b8331a4f3e0c854e, type: 2}
+  endlessMaterial: {fileID: 2100000, guid: 35b6ec549c03daf43b9529d9844984d4, type: 2}
+  endlessValueDecreaseSpeed: 0.1
   startingTime: 62
   comboWindow: 1
   baseScore: 3

@@ -141,6 +141,9 @@ MonoBehaviour:
   moveSpeed: 2
   maxRotationSpeed: 90
   directionChangeInterval: 2
+  endlessMoveSpeed: 4
+  endlessMaxRotationSpeed: 100
+  endlessDirectionChangeInterval: 4
   xMin: -7
   xMax: 7
   yMin: -4
