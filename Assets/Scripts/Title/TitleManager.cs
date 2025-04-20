@@ -3,20 +3,18 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
 using Transition;
+using System.Collections;
 
 public class TitleManager : MonoBehaviour
 {
     [SerializeField] GameObject[] Effect;
     [SerializeField] Button startButton;
     [SerializeField] private ShaderTransitionController shaderTransitionController;
-    [SerializeField] AudioSource ButtonAudio;
+    [SerializeField] AudioSource ButtonSound;
     [SerializeField] GameObject IObject;
-    private Vector3 IScale;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        IScale = new Vector3(1,1,1);
         Effect[0].SetActive(false);
         Effect[1].SetActive(false);
         Effect[2].SetActive(false);
@@ -36,39 +34,22 @@ public class TitleManager : MonoBehaviour
         Effect[1].SetActive(true);
         Effect[2].SetActive(true);
         Effect[3].SetActive(true);
-
-
-        ButtonAudio.Play();
-        while (true)
-        {
-            if (IObject.transform.localScale.x >= 0.0f)
-            {
-                IObject.transform.localScale -= IScale;
-            }
-            else
-            {
-                break;
-            }
-        }
-
-
-
+        ButtonSound.PlayOneShot(ButtonSound.clip); // 効果音を再生
+        Debug.Log(ButtonSound.isPlaying);
         GoToMain().Forget();
-
 
     }
 
     public void EffectOff()
     {
-
     }
-
-
 
     public async UniTask  GoToMain()
     {
 
-        await UniTask.Delay(2000);
+        await UniTask.WaitUntil(() => !ButtonSound.isPlaying);
+        //await UniTask.Delay((int)(ButtonSound.clip.length));
+        //await UniTask.Delay(2000);
         await shaderTransitionController.StartTransition();
 
         await SceneManager.LoadSceneAsync("Main");
