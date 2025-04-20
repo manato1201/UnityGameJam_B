@@ -1,9 +1,9 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System.Runtime.CompilerServices;
 
-//ƒXƒRƒA•\¦‚ÌƒXƒNƒŠƒvƒg
+//ã‚¹ã‚³ã‚¢è¡¨ç¤ºã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆ
 
 public class ScoreFall : MonoBehaviour
 {
@@ -42,21 +42,23 @@ public class ScoreFall : MonoBehaviour
 
     public void Fall(float result)
     {
-        //ƒXƒRƒA•\¦
+        if (Select.isEasy) result *= 2;
+        else if (Select.isHard) result /= 2;
+        //ã‚¹ã‚³ã‚¢è¡¨ç¤º
         score.text = result + "%";
-        //—‚¿‚Ä‚­‚éˆ—
+        //è½ã¡ã¦ãã‚‹å‡¦ç†
         if (pos.y >= 0)
         { 
             rectTransform.anchoredPosition = pos;
             pos.y -= 0.1f * speed;
         }
-        //—‚¿‚Ä‚«‚½Œã‚Ìˆ—
+        //è½ã¡ã¦ããŸå¾Œã®å‡¦ç†
         if(pos.y <= 20 && soundFlug)
         {
             fallSound.PlayOneShot(fallSound.clip);
             soundFlug=false;
 
-            //80“ˆÈã‚È‚çƒn[ƒg‚ÌƒGƒtƒFƒNƒg‚ğo‚·
+            //80ï¼…ä»¥ä¸Šãªã‚‰ãƒãƒ¼ãƒˆã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’å‡ºã™
             if(result >= 80)
             {
                 loveEffect.SetActive(true);
@@ -64,7 +66,7 @@ public class ScoreFall : MonoBehaviour
                 //loveParticle.Play();
             }
 
-            //20“ˆÈã‚È‚çŠ„‚ê‚½ƒn[ƒg‚ÌƒGƒtƒFƒNƒg‚ğo‚·
+            //20ï¼…ä»¥ä¸Šãªã‚‰å‰²ã‚ŒãŸãƒãƒ¼ãƒˆã®ã‚¨ãƒ•ã‚§ã‚¯ãƒˆã‚’å‡ºã™
             else if (result <= 20)
             {
                 sadEffect.SetActive(true);
