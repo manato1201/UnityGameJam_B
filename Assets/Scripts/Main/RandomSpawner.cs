@@ -46,7 +46,7 @@ public class RandomSpawner : MonoBehaviour
         if (isPaused)
         {
             // 全てのオブジェクトが消えたら再開
-            if (spawnedObjects.Count == 0)
+            if (spawnedObjects.Count == 10)
             {
                 isPaused = false;
             }

@@ -102,13 +102,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d66d1ea02e982a5478b47ddc04e40ea5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 2
+  moveSpeed: 1
   maxRotationSpeed: 90
-  directionChangeInterval: 3
-  xMin: -5
-  xMax: 5
-  yMin: -5
-  yMax: 5
+  directionChangeInterval: 2
+  xMin: -6
+  xMax: 6
+  yMin: -3
+  yMax: 3
 --- !u!114 &7044228150723528741
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,7 +127,6 @@ MonoBehaviour:
   valueDecrease: 0.1
   flashColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   flashDuration: 0.5
-  otherObjectToShow: {fileID: 6496690216855801904, guid: d72f3654d460d094fbdaf370138a8fee, type: 3}
 --- !u!58 &2602281051164560412
 CircleCollider2D:
   m_ObjectHideFlags: 0

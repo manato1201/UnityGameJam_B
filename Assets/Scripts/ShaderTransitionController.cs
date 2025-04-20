@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using GM;
 
 
 namespace Transition
@@ -10,6 +11,8 @@ namespace Transition
 
     public class ShaderTransitionController : MonoBehaviour
     {
+        //public static ShaderTransitionController Instance { get; private set; }
+
         [Header("Settings")]
         public Material transitionMaterial; // トランジション用のマテリアル
         public float transitionSpeed = 1.0f; // トランジションの速度
@@ -76,7 +79,7 @@ namespace Transition
         public void ResetTransition()
         {
             isTransitioning = false;
-            Value = 0.0f;
+            Value = 0.75f;
             transitionMaterial.SetFloat("_Value", Value);
         }
     }
