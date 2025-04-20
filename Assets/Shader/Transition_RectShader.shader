@@ -1,4 +1,4 @@
-Shader "Transition/Transition_Rect_Slide"
+ï»¿Shader "Transition/Transition_Rect_Slide"
 {
     Properties
     {
@@ -57,28 +57,28 @@ Shader "Transition/Transition_Rect_Slide"
                     return dot(p, p);
                 }
 
-                //lŠpŒ`
+                //å››è§’å½¢
                 float rectangle(float2 p, float2 size) {
                     return max(abs(p.x) - size.x, abs(p.y) - size.y);
                 }
 
-                //‚Ğ‚µŒ`
+                //ã²ã—å½¢
                 float rhombus(float2 p, float2 size) {
                     return abs(p.x) + abs(p.y) - size;
                 }
 
-                //ƒn[ƒg
+                //ãƒãƒ¼ãƒˆ
                 float heart(float2 p, float size) {
                     p.x = 1.2 * p.x - sign(p.x) * p.y * 0.55;
                     return length(p) - size;
                 }
 
-                //‰~ŠÂ
+                //å††ç’°
                 float ring(float2 p, float size, float w) {
                     return abs(length(p) - size) + w;
                 }
 
-                //‰ñ“]
+                //å›è»¢
                 float2 rotation(float2 p, float theta) {
                     return float2((p.x) * cos(theta) - p.y * sin(theta), p.x * sin(theta) + p.y * cos(theta));
                 }
@@ -109,7 +109,7 @@ Shader "Transition/Transition_Rect_Slide"
                             float2 f = (div - 1.0) * (0.5 - sg * 0.5) + (i_st + float2(i, j)) * sg;
                             float v = val - dot(f, abs(dir)) * w;
 
-                            float ci = rectangle(f_st - float2(2.0 * i, 2.0 * j), 0);
+                            float ci = heart(f_st - float2(2.0 * i, 2.0 * j), 0);
 
                             a = min(a, step(v, ci));
                             //a = min(a, smoothstep(v - 0.1, v, ci));
