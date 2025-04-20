@@ -159,5 +159,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectPrefab: {fileID: 0}
   sound: {fileID: 0}
+  transitionMaterial: {fileID: 2100000, guid: 35b6ec549c03daf43b9529d9844984d4, type: 2}
+  valueDecrease: 0.1
   flashColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  flashDuration: 0.1
+  flashDuration: 0.5
+  otherObjectToShow: {fileID: 6496690216855801904, guid: d72f3654d460d094fbdaf370138a8fee, type: 3}
