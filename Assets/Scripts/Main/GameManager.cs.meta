@@ -1,2 +1,19 @@
 fileFormatVersion: 2
 guid: 594524116bd3af845893e93db5b02fea
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - easyHideObject: {instanceID: 0}
+  - hardMaterial: {instanceID: 0}
+  - endlessMaterial: {fileID: 2100000, guid: 35b6ec549c03daf43b9529d9844984d4, type: 2}
+  - scoreText: {instanceID: 0}
+  - timeText: {instanceID: 0}
+  - comboText: {instanceID: 0}
+  - timeUpText: {instanceID: 0}
+  - shaderTransitionController: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
