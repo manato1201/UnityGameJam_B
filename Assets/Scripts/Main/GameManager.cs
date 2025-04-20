@@ -1,4 +1,6 @@
 ﻿using UnityEngine;
+using TMPro;
+using DG.Tweening;
 
 namespace GM
 {
@@ -9,98 +11,162 @@ namespace GM
         public static GameManager Instance { get; private set; }
 
         [Header("ゲーム設定")]
-        // ゲーム開始時の残り時間（秒）
         public float startingTime = 60f;
-        // Combo（連続クリック）判定の許容時間
         public float comboWindow = 1f;
 
         [Header("スコア・ボーナス")]
-        // Iクリック時の基本スコア
         public int baseScore = 10;
-        // コンボ成立時に加算される残り時間のボーナス（秒）
         public float bonusTimePerCombo = 1f;
 
-        // 現在のゲーム状態（インスペクター上で確認可能）
-        [HideInInspector] public float remainingTime;
-        [HideInInspector] public int totalScore;
-        [HideInInspector] public int currentCombo;
-        [HideInInspector] public float lastIClickTime;
+        [Header("コンボ表示設定")]
+        [SerializeField] private float comboDisplayDuration = 2f;
+
+        [Header("UI表示（TextMeshPro）")]
+        [SerializeField] private TextMeshProUGUI scoreText;
+        [SerializeField] private TextMeshProUGUI timeText;
+        [SerializeField] private TextMeshProUGUI comboText;
+
+        [Header("アニメーション設定")]
+        [SerializeField] private float normalScale = 1.5f;
+        [SerializeField] private float normalDuration = 0.5f;
+        [SerializeField] private float fiveScale = 2f;
+        [SerializeField] private float fiveDuration = 0.7f;
+
+        private float remainingTime;
+        private int totalScore;
+        private int currentCombo;
+        private float lastIClickTime;
+        private float comboDisplayTimer;
+
+        // Tweens
+        private Tween normalComboTween;
+        private Tween fiveComboTween;
 
         void Awake()
         {
-            // すでに存在する場合は削除
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-                return;
-            }
+            if (Instance != null && Instance != this) { Destroy(gameObject); return; }
             Instance = this;
-            // 必要ならシーン遷移時にも破棄しない
-            // DontDestroyOnLoad(gameObject);
         }
 
         void Start()
         {
-            // ゲーム開始時の初期値設定
             remainingTime = startingTime;
             totalScore = 0;
             currentCombo = 0;
-            lastIClickTime = -comboWindow;  // すぐにリセットされないように設定
+            lastIClickTime = -comboWindow;
+            comboDisplayTimer = comboDisplayDuration;
+            SetupComboAnimation();
+            UpdateUI();
         }
 
         void Update()
         {
-            // ゲーム中は残り時間をカウントダウン
+            // 時間カウント
             if (remainingTime > 0f)
             {
                 remainingTime -= Time.deltaTime;
+                remainingTime = Mathf.Max(remainingTime, 0f);
+                UpdateTimeUI();
             }
-            else
+            else GameOver();
+
+            // クリック間隔でコンボリセット
+            if (Time.time - lastIClickTime > comboWindow && currentCombo != 0)
             {
-                GameOver();
+                ResetCombo();
             }
 
-            // コンボ判定：comboWindow より時間が経過していたらリセット
-            if (Time.time - lastIClickTime > comboWindow)
+            // 表示時間経過でコンボ非表示・リセット
+            if (currentCombo > 0)
             {
-                currentCombo = 0;
+                comboDisplayTimer += Time.deltaTime;
+                if (comboDisplayTimer >= comboDisplayDuration)
+                {
+                    ResetCombo();
+                }
             }
         }
 
-        /// <summary>
-        /// Iタグのオブジェクトがクリックされた場合の処理。
-        /// 連続クリック（コンボ）が成立していればコンボ数を加算し、
-        /// スコアと残り時間にボーナスを付与します。
-        /// </summary>
+        /// <summary> Iクリック時に呼ぶ </summary>
         public void IClicked()
         {
-            float currentTime = Time.time;
-            // 前回のクリックから comboWindow 内であればコンボ継続、そうでなければリセット
-            if (currentTime - lastIClickTime <= comboWindow)
-            {
-                currentCombo++;
-            }
-            else
-            {
-                currentCombo = 1;
-            }
-            lastIClickTime = currentTime;
+            float now = Time.time;
+            if (now - lastIClickTime <= comboWindow) currentCombo++;
+            else currentCombo = 1;
+            lastIClickTime = now;
+            comboDisplayTimer = 0f;
 
-            // コンボ数に応じたボーナスの計算
             int bonusPoints = baseScore * currentCombo;
             totalScore += bonusPoints;
             remainingTime += bonusTimePerCombo * currentCombo;
 
-            Debug.Log($"IClicked: Combo: {currentCombo}, Bonus Points: {bonusPoints}, Total Score: {totalScore}, Remaining Time: {remainingTime}");
+            UpdateScoreUI();
+            UpdateTimeUI();
+            UpdateComboUI();
+
+            // アニメーション再生
+            if (currentCombo % 5 == 0)
+            {
+                if (fiveComboTween == null )
+                {
+                    fiveComboTween.Restart();
+                }
+            }
+            else
+            {
+                normalComboTween.Restart();
+            }
         }
 
-        /// <summary>
-        /// 残り時間が0秒以下になったときのゲームオーバー処理
-        /// </summary>
+        /// <summary> I以外クリックで呼ぶ </summary>
+        public void NonIClicked()
+        {
+            ResetCombo();
+        }
+
+        private void ResetCombo()
+        {
+            currentCombo = 0;
+            UpdateComboUI();
+        }
+
         private void GameOver()
         {
-            Debug.Log("Game Over! Final Score: " + totalScore);
-            // ここにゲームオーバー時の処理（画面遷移、リザルト表示など）を追加
+            Debug.Log($"Game Over! Final Score: {totalScore}");
+        }
+
+        private void UpdateUI()
+        {
+            UpdateScoreUI();
+            UpdateTimeUI();
+            UpdateComboUI();
+        }
+        private void UpdateScoreUI() { if (scoreText) scoreText.text = $"{totalScore}%"; }
+        private void UpdateTimeUI() { if (timeText) timeText.text = $"Time: {remainingTime:F1}"; }
+        private void UpdateComboUI() { if (comboText) comboText.text = currentCombo > 1 ? $"Combo x{currentCombo}!" : string.Empty; }
+
+        private void SetupComboAnimation()
+        {
+            var rt = comboText.rectTransform;
+            comboText.alpha = 1;
+            rt.localScale = Vector3.one;
+
+            // 通常用Tween
+            normalComboTween = rt.DOScale(normalScale, normalDuration)
+                .SetAutoKill(false)
+                .Pause()
+                .OnComplete(() => rt.DOScale(1f, normalDuration));
+            // 5コンボ用Tween
+            fiveComboTween = rt.DOScale(fiveScale, fiveDuration)
+                .SetAutoKill(false)
+                .Pause()
+                .OnComplete(() => rt.DOScale(1f, normalDuration));
+            // フェードアウト for normal
+            normalComboTween.OnPlay(() => comboText.DOFade(1f, 0));
+            normalComboTween.OnStepComplete(() => comboText.DOFade(0f, normalDuration));
+            // フェード非表示 for five
+            fiveComboTween.OnPlay(() => comboText.DOFade(1f, 0));
+            fiveComboTween.OnStepComplete(() => comboText.DOFade(0f, fiveDuration));
         }
     }
 }

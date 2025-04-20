@@ -13,8 +13,7 @@ public class ClickToDestroyEffect : MonoBehaviour
     private AudioSource audioSource;
     public Color flashColor = Color.yellow; // フラッシュ時の色
     public float flashDuration = 0.1f;      // フラッシュ時間（秒）
-    [Header("Loveクリック時に表示する別オブジェクト（Inspectorで非アクティブ状態にしておく）")]
-    public GameObject otherObjectToShow;
+   
 
 
     void Start()
@@ -39,7 +38,15 @@ public class ClickToDestroyEffect : MonoBehaviour
                 float v = transitionMaterial.GetFloat("_Value");
                 transitionMaterial.SetFloat("_Value", v + valueDecrease);
             }
-            FlashIObjectsAsync().Forget();
+            // Iタグのオブジェクトの回転・移動を停止
+            var iObjects = GameObject.FindGameObjectsWithTag("I");
+            foreach (var obj in iObjects)
+            {
+                var mover = obj.GetComponent<RandomMover>();
+                if (mover != null)
+                    mover.enabled = false;
+            }
+           // FlashIObjectsAsync().Forget();
             Destroy(gameObject);
         }
         else if (gameObject.tag == "Sad")
@@ -66,9 +73,7 @@ public class ClickToDestroyEffect : MonoBehaviour
     async UniTaskVoid FlashIObjectsAsync()
     {
 
-        // 別オブジェクトを表示
-        if (otherObjectToShow != null)
-            otherObjectToShow.SetActive(true);
+      
 
         var objs = GameObject.FindGameObjectsWithTag("I");
         var rends = new List<Renderer>();
@@ -89,7 +94,7 @@ public class ClickToDestroyEffect : MonoBehaviour
 
         // 指定時間待機
         await UniTask.Delay((int)(flashDuration * 1000));
-        otherObjectToShow.SetActive(false);
+        
         // 元に戻す
         for (int i = 0; i < rends.Count; i++)
         {
